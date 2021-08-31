@@ -115,31 +115,31 @@ namespace H1_ERP
         }
         private static void SearchVare()
         {
-            Console.WriteLine("Indtast søgning");
+            WriteLineCommands.WriteLineMessage("Indtast søgning");
             string input = ReadLineCommands.GetStringInput();
             int i = 0;
             foreach(Item item in Vareliste.Varer)
             {
-                if (item.ItemName.StartsWith(input, StringComparison.OrdinalIgnoreCase))
+                
+                if (item.ItemName.Contains(input, StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine($"Name: {item.ItemName}   ID: {item.ItemID} ");
+                    WriteLineCommands.WriteLineMessage($"Name: {item.ItemName}   ID: {item.ItemID} ");
                     i++;
                 }
             }
-            Console.WriteLine($"{i} results");
-            Console.WriteLine("\nTryk enter for at returnere til varelisten.");
-            Console.ReadLine();
+            WriteLineCommands.WriteLineMessage($"{i} results");
+            WriteLineCommands.WritelineWaitForKeyPress("\nTryk enter for at returnere til varelisten.");
         }
         private static void ChangeVare()
         {
-            Console.WriteLine("Indtast vare ID");
+            WriteLineCommands.WriteLineMessage("Indtast vare ID");
             int ID;
             while (true)
             {
                 ID = ReadLineCommands.GetIntInput();
                 if (Vareliste.Varer.FirstOrDefault(i => i.ItemID == ID) == null)
                 {
-                    Console.WriteLine("Enter a valid item ID");
+                    WriteLineCommands.WriteLineMessage("Enter a valid item ID");
                 }
                 else
                 {
@@ -147,11 +147,11 @@ namespace H1_ERP
                 }
             }
             Item item = Vareliste.Varer.First(i => i.ItemID == ID);
-            Console.WriteLine("Indtast nyt navn på vare");
+            WriteLineCommands.WriteLineMessage("Indtast nyt navn på vare");
             item.ItemName = ReadLineCommands.GetStringInput();
-            Console.WriteLine("Indtast ny salgs pris");
+            WriteLineCommands.WriteLineMessage("Indtast ny salgs pris");
             item.ItemSalesPrice = ReadLineCommands.GetDoubleInput();
-            Console.WriteLine("Indtast ny købspris");
+            WriteLineCommands.WriteLineMessage("Indtast ny købspris");
             item.ItemBuyPrice = ReadLineCommands.GetDoubleInput();
         }
         private static void RunVareliste()

@@ -85,5 +85,10 @@ namespace H1_ERP.ConsoleCommands
             WriteBars(100);
             NewLine();
         }
+        public static void WritelineWaitForKeyPress(string message)
+        {
+            Console.WriteLine(message);
+            Console.ReadLine();
+        }
     }
 }
