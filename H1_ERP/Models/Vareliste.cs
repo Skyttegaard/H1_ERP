@@ -26,7 +26,7 @@ namespace H1_ERP.Models
             {
                 _varer.Add(item);
             }
-            if(_varer.All(it => it.ItemName == item.ItemName && it.ItemID == item.ItemID))
+            if(_varer.Any(it => it.ItemName == item.ItemName && it.ItemID == item.ItemID))
             {
                 _varer.FirstOrDefault(it => it.ItemID == item.ItemID).Quantity++;
             }
@@ -45,6 +45,11 @@ namespace H1_ERP.Models
                 itemtest.Quantity += item.Quantity;
             }
         }
+        public static void AddSingleItemToList(Item item)
+        {
+            Item vare = _varer.FirstOrDefault(it => it.ItemID == item.ItemID);
+            vare.Quantity += item.Quantity;
+        }
         public static Item ReturnItemFromID(int id)
         {
             return _varer.FirstOrDefault(it => it.ItemID == id);
@@ -61,8 +66,10 @@ namespace H1_ERP.Models
                     i++;
                 }
             }
+            
             return i;
         }
-        public static List<Item> GetList() => _varer;
+        public static IReadOnlyList<Item> GetList() => _varer.AsReadOnly();
+        
     }
 }

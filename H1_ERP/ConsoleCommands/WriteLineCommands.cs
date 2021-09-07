@@ -58,7 +58,7 @@ namespace H1_ERP.ConsoleCommands
                 Console.Write("-");
             }
         }
-        public static void RunVareListe(List<Item> list)
+        public static void RunVareListe(IReadOnlyList<Item> list)
         {
             Console.SetCursorPosition(0, 2);
             Console.WriteLine("Vare navn:");

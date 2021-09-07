@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using H1_ERP.Models;
 
 namespace H1_ERP.ConsoleCommands
 {
@@ -40,6 +41,7 @@ namespace H1_ERP.ConsoleCommands
                 }
             }
         }
+        
 
         public static string GetStringInput()
         {

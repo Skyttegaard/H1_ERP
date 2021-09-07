@@ -28,7 +28,7 @@ namespace H1_ERP
                     break;
                 case 2:
                     WriteLineCommands.WriteLineMessage("Varebestilling");
-                    WriteLineCommands.RunVareListe(Varebestilling.OrderList);
+                    WriteLineCommands.RunVareListe(Varebestilling.GetList());
                     ChooseBestillingMenu(WriteLineCommands.Menu(Varebestilling.MenuOptions, "Tilbage til mainmenu"));
                     break;
                 case 9:
@@ -81,10 +81,11 @@ namespace H1_ERP
             switch (input)
             {
                 case 1:
-                    //Bestil enkelte vare
+                    OrderSingleItems();
+                    ChooseStarterMenu(2); 
                     break;
                 case 2:
-                    OrderAllItems();
+                    Varebestilling.OrderAllItems();
                     ChooseStarterMenu(2);
                     break;
                 case 9:
@@ -173,13 +174,24 @@ namespace H1_ERP
             ChooseVarelisteMenu(WriteLineCommands.Menu(VarelisteMenu.MenuOptions, "Tilbage til mainmenu"));
             
         }
-        private static void OrderAllItems()
-        {
-            Vareliste.AddMultipleItemsToList(Varebestilling.OrderList);
-            Varebestilling.OrderList.Clear();
-        }
+        
         private static void OrderSingleItems()
         {
+            WriteLineCommands.WriteLineMessage("Skriv ID på varen du vil bestille hjem.");
+            int ID;
+            while (true)
+            {
+                ID = ReadLineCommands.GetIntInput();
+                if (Varebestilling.ReturnItemFromID(ID) == null)
+                {
+                    WriteLineCommands.WriteLineMessage("Indtast et gyldigt ID");
+                }
+                else
+                {
+                    break;
+                }
+            }
+            Varebestilling.OrderSingleItem(ID);
 
         }
         
