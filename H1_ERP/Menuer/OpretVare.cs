@@ -21,7 +21,10 @@ namespace H1_ERP.Menuer
             double buyPrice = ReadLineCommands.GetDoubleInput();
             WriteLineCommands.WriteLineMessage("Please enter item ID");
             int ID = ReadLineCommands.GetIntInput();
-            Vareliste.CreateItem(itemname, salesPrice, buyPrice, ID);
+            
+            Vareliste.AddItemToList(new Item(itemname, salesPrice, buyPrice, ID));
+            
+            
         }
     }
 }

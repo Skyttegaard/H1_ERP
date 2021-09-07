@@ -8,17 +8,25 @@ namespace H1_ERP.Models
 {
     public class Item
     {
-        public string ItemName { get; set; }
-        public double ItemSalesPrice { get; set; }
-        public int ItemID { get; set; }
-        public double ItemBuyPrice { get; set; }
+        public string ItemName { get; private set; }
+        public double ItemSalesPrice { get; private set; }
+        public int ItemID { get; private set; }
+        public double ItemBuyPrice { get; private set; }
+        public int Quantity { get; set; }
 
-        public Item(string itemName, double itemSalesPrice, double itemBuyPrice, int itemID)
+        public Item(string itemName, double itemSalesPrice, double itemBuyPrice, int itemID, int quantity = 0)
         {
             ItemName = itemName;
             ItemSalesPrice = itemSalesPrice;
             ItemBuyPrice = itemBuyPrice;
             ItemID = itemID;
+            Quantity = quantity;
+        }
+        public static void EditItem(Item item, string itemName, double itemSalesPrice, double itemBuyPrice)
+        {
+            item.ItemName = itemName;
+            item.ItemSalesPrice = itemSalesPrice;
+            item.ItemBuyPrice = itemBuyPrice;
         }
     }
 }

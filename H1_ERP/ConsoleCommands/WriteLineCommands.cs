@@ -29,7 +29,7 @@ namespace H1_ERP.ConsoleCommands
                 int input = ReadLineCommands.GetIntInput();
                 if(input > list.Count && input != 9 || input < 1 )
                 {
-                    Console.WriteLine("Please choose a number from the list");
+                    Console.WriteLine("Vælg et tal fra listen");
                 }
                 else
                 {
@@ -58,18 +58,20 @@ namespace H1_ERP.ConsoleCommands
                 Console.Write("-");
             }
         }
-        public static void RunVareListe()
+        public static void RunVareListe(List<Item> list)
         {
             Console.SetCursorPosition(0, 2);
-            Console.WriteLine("Item name:");
+            Console.WriteLine("Vare navn:");
             Console.SetCursorPosition(20, 2);
-            Console.WriteLine("Item sales price:");
+            Console.WriteLine("Vare salgs pris:");
             Console.SetCursorPosition(40, 2);
-            Console.WriteLine("Item buy price:");
+            Console.WriteLine("Vare købs pris:");
             Console.SetCursorPosition(60, 2);
-            Console.WriteLine("Item ID:");
+            Console.WriteLine("Vare ID:");
+            Console.SetCursorPosition(80, 2);
+            Console.WriteLine("Vare mængde:");
             int i = 4;
-            foreach (var item in Vareliste.Varer)
+            foreach (var item in list)
             {
                 Console.SetCursorPosition(0, i);
                 Console.Write(item.ItemName);
@@ -79,6 +81,8 @@ namespace H1_ERP.ConsoleCommands
                 Console.Write(item.ItemBuyPrice);
                 Console.SetCursorPosition(60, i);
                 Console.Write(item.ItemID);
+                Console.SetCursorPosition(80, i);
+                Console.Write(item.Quantity);
                 i++;
             }
             NewLine();

@@ -20,7 +20,7 @@ namespace H1_ERP.ConsoleCommands
                 }
                 catch
                 {
-                    Console.WriteLine("Please type a number");
+                    Console.WriteLine("Indtast et tal");
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace H1_ERP.ConsoleCommands
                 }
                 catch
                 {
-                    Console.WriteLine("Please type a number");
+                    Console.WriteLine("Indtast et tal");
                 }
             }
         }

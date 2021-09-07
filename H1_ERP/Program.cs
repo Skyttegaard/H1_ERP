@@ -9,40 +9,33 @@ namespace H1_ERP
 {
     class Program
     {
-        static List<string> menutest = new();
+        private static List<string> _menuListe = new() {"Vareliste", "Varebestilling" };
         static void Main(string[] args)
         {
-            Vareliste.CreateItem("Testing", 8000, 10000, 99);
-            Initialize();
-            ChooseStarterMenu(WriteLineCommands.Menu(menutest, "Luk programmet"));
+            Vareliste.AddItemToList(new Item("Testing", 8000, 10000, 99));
+            ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
         }
 
-
-        private static void Initialize()
-        {
-            menutest.Add("Vareliste");
-            menutest.Add("Varebestilling");
-        }
         private static void ChooseStarterMenu(int input)
         {
             Console.Clear();
             switch (input)
             {
                 case 1:
-                    //Metode til at køre vareliste herfra.
                     Console.Clear();
-                    Console.WriteLine("Vareliste:");
+                    WriteLineCommands.WriteLineMessage("Vareliste:");
                     RunVareliste();
                     break;
                 case 2:
-                    //Metode til varebestilling
-                    Console.WriteLine("Varebestilling");
+                    WriteLineCommands.WriteLineMessage("Varebestilling");
+                    WriteLineCommands.RunVareListe(Varebestilling.OrderList);
+                    ChooseBestillingMenu(WriteLineCommands.Menu(Varebestilling.MenuOptions, "Tilbage til mainmenu"));
                     break;
                 case 9:
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("ERROR");
+                    WriteLineCommands.WriteLineMessage("ERROR");
                     break;
             }
         }
@@ -52,57 +45,76 @@ namespace H1_ERP
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("Opret vare");
+                    WriteLineCommands.WriteLineMessage("Opret vare");
                     OpretVare.CreateItems();
                     ChooseStarterMenu(1);
                     break;
                 case 2:
                     Console.Clear();
-                    Console.WriteLine("Ændre vare");
+                    WriteLineCommands.WriteLineMessage("Ændre vare");
                     ChangeVare();
                     ChooseStarterMenu(1);
                     break;
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("Søg vare");
+                    WriteLineCommands.WriteLineMessage("Søg vare");
                     SearchVare();
                     ChooseStarterMenu(1);
                     break;
                 case 4:
                     Console.Clear();
-                    Console.WriteLine("Fjern vare");
+                    WriteLineCommands.WriteLineMessage("Fjern vare");
                     RemoveVare();
                     ChooseStarterMenu(1);
                     break;
                 case 9:
                     Console.Clear();
-                    ChooseStarterMenu(WriteLineCommands.Menu(menutest, "Luk programmet"));
+                    ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
                     break;
                 default:
-                    Console.WriteLine("ERROR");
+                    WriteLineCommands.WriteLineMessage("ERROR");
+                    break;
+            }
+        }
+        private static void ChooseBestillingMenu(int input)
+        {
+            switch (input)
+            {
+                case 1:
+                    //Bestil enkelte vare
+                    break;
+                case 2:
+                    OrderAllItems();
+                    ChooseStarterMenu(2);
+                    break;
+                case 9:
+                    Console.Clear();
+                    ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
+                    break;
+                default:
+                    WriteLineCommands.WriteLineMessage("ERROR");
                     break;
             }
         }
         private static void RemoveVare()
         {
-            Console.WriteLine("Indtast vare ID");
+            WriteLineCommands.WriteLineMessage("Indtast vare ID");
             int ID;
             while (true)
             {
                 ID = ReadLineCommands.GetIntInput();
-                if (Vareliste.Varer.FirstOrDefault(i => i.ItemID == ID) == null)
+                if (Vareliste.ReturnItemFromID(ID) == null)
                 {
-                    Console.WriteLine("Enter a valid item ID");
+                    WriteLineCommands.WriteLineMessage("Indtast et gyldigt ID");
                 }
                 else
                 {
                     break;
                 }
             }
-            Item item = Vareliste.Varer.First(i => i.ItemID == ID);
-            Console.WriteLine($"Er du sikker på at du vil fjerne {item.ItemName}?\nTast 'y' hvis ja.");
+            Item item = Vareliste.ReturnItemFromID(ID);
+            WriteLineCommands.WriteLineMessage($"Er du sikker på at du vil fjerne {item.ItemName}?\nTast 'y' hvis ja.");
             string answer = ReadLineCommands.GetStringInput();
-            answer = answer.ToLower();
             if (answer == "y")
             {
                 Vareliste.RemoveItem(item);
@@ -117,17 +129,8 @@ namespace H1_ERP
         {
             WriteLineCommands.WriteLineMessage("Indtast søgning");
             string input = ReadLineCommands.GetStringInput();
-            int i = 0;
-            foreach(Item item in Vareliste.Varer)
-            {
-                
-                if (item.ItemName.Contains(input, StringComparison.OrdinalIgnoreCase))
-                {
-                    WriteLineCommands.WriteLineMessage($"Name: {item.ItemName}   ID: {item.ItemID} ");
-                    i++;
-                }
-            }
-            WriteLineCommands.WriteLineMessage($"{i} results");
+            int i = Vareliste.PrintSearched(input);
+            WriteLineCommands.WriteLineMessage($"{i} resultater");
             WriteLineCommands.WritelineWaitForKeyPress("\nTryk enter for at returnere til varelisten.");
         }
         private static void ChangeVare()
@@ -137,27 +140,47 @@ namespace H1_ERP
             while (true)
             {
                 ID = ReadLineCommands.GetIntInput();
-                if (Vareliste.Varer.FirstOrDefault(i => i.ItemID == ID) == null)
+                if (Vareliste.ReturnItemFromID(ID) == null)
                 {
-                    WriteLineCommands.WriteLineMessage("Enter a valid item ID");
+                    WriteLineCommands.WriteLineMessage("Indtast et gyldigt ID");
                 }
                 else
                 {
                     break;
                 }
             }
-            Item item = Vareliste.Varer.First(i => i.ItemID == ID);
+            Item item = Vareliste.ReturnItemFromID(ID);
             WriteLineCommands.WriteLineMessage("Indtast nyt navn på vare");
-            item.ItemName = ReadLineCommands.GetStringInput();
+            string itemName = ReadLineCommands.GetStringInput();
             WriteLineCommands.WriteLineMessage("Indtast ny salgs pris");
-            item.ItemSalesPrice = ReadLineCommands.GetDoubleInput();
+            double salesPrice = ReadLineCommands.GetDoubleInput();
             WriteLineCommands.WriteLineMessage("Indtast ny købspris");
-            item.ItemBuyPrice = ReadLineCommands.GetDoubleInput();
+            double buyPrice = ReadLineCommands.GetDoubleInput();
+            Item.EditItem(item, itemName, salesPrice, buyPrice);
+            WriteLineCommands.WriteLineMessage("Ønsker du at tilføje denne vare til bestillingslisten?\nTast 'y' hvis ja.");
+            string answer = ReadLineCommands.GetStringInput();
+            if (answer.ToLower() == "y")
+            {
+                WriteLineCommands.WriteLineMessage("Hvor mange?");
+                Varebestilling.AddItemToList(item, ReadLineCommands.GetIntInput());
+            }
+            
+
         }
         private static void RunVareliste()
         {
-            WriteLineCommands.RunVareListe();
+            WriteLineCommands.RunVareListe(Vareliste.GetList());
             ChooseVarelisteMenu(WriteLineCommands.Menu(VarelisteMenu.MenuOptions, "Tilbage til mainmenu"));
+            
+        }
+        private static void OrderAllItems()
+        {
+            Vareliste.AddMultipleItemsToList(Varebestilling.OrderList);
+            Varebestilling.OrderList.Clear();
+        }
+        private static void OrderSingleItems()
+        {
+
         }
         
 
