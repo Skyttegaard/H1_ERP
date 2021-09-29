@@ -18,8 +18,20 @@ namespace H1_ERP.Models
         }
         public static void RemoveItem(Item item)
         {
-            _varer.Remove(item);
+            if(item.Quantity <= 1)
+            {
+                _varer.Remove(item);
+
+            }
+            else
+            {
+                item.Quantity--;
+            }
         }
+        /// <summary>
+        /// Tilføjer item til list hvis ID ikke er brugt. Hvis ID og navn er ens med eksisterende item går quantity op. Hvis ID samme id men forskelligt navn == error.
+        /// </summary>
+        /// <param name="item"></param>
         public static void AddItemToList(Item item)
         {
             if(_varer.All(it => it.ItemID != item.ItemID))
@@ -36,6 +48,10 @@ namespace H1_ERP.Models
                 Thread.Sleep(3000);
             }
         }
+        /// <summary>
+        /// Tilføjer quantity til eksisterende ting i varelisten ved hjælp af en liste med item objekt.
+        /// </summary>
+        /// <param name="list"></param>
         public static void AddMultipleItemsToList(List<Item> list)
         {
             Item itemtest;
@@ -45,15 +61,29 @@ namespace H1_ERP.Models
                 itemtest.Quantity += item.Quantity;
             }
         }
+        /// <summary>
+        /// Tilføjer en enkelt item's quantity til varelisten.
+        /// </summary>
+        /// <param name="item"></param>
         public static void AddSingleItemToList(Item item)
         {
             Item vare = _varer.FirstOrDefault(it => it.ItemID == item.ItemID);
             vare.Quantity += item.Quantity;
         }
+        /// <summary>
+        /// Returnere item med tilsvarende ID fra varelisten.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static Item ReturnItemFromID(int id)
         {
             return _varer.FirstOrDefault(it => it.ItemID == id);
         }
+        /// <summary>
+        /// Finder alle varer som matcher det som der er søgt på i varelisten og returnere mængden som int.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static int PrintSearched(string input)
         {
             int i = 0;

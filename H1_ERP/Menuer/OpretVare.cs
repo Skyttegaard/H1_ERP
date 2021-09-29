@@ -10,6 +10,9 @@ namespace H1_ERP.Menuer
 {
     class OpretVare
     {
+        /// <summary>
+        /// Tager alle inputs der er nødvendige for at lave en ny vare.
+        /// </summary>
         public static void CreateItems()
         {
             

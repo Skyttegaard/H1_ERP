@@ -9,7 +9,7 @@ namespace H1_ERP.Models
     class Adresse
     {
         public string Vejnavn { get; set; }
-        public int HusNummer { get; set; }
+        public string HusNummer { get; set; }
         public int PostNummer { get; set; }
         public string By { get; set; }
     }

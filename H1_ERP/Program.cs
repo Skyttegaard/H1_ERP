@@ -9,10 +9,13 @@ namespace H1_ERP
 {
     class Program
     {
-        private static List<string> _menuListe = new() {"Vareliste", "Varebestilling" };
+        private static List<string> _menuListe = new() {"Vareliste", "Varebestilling", "Kundeliste" };
         static void Main(string[] args)
         {
-            Vareliste.AddItemToList(new Item("Testing", 8000, 10000, 99));
+            Logger.Info("Programmet er startet op");
+            Logger.Error("En mærkelig fejl er opstået");
+            
+            
             ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
         }
 
@@ -30,6 +33,11 @@ namespace H1_ERP
                     WriteLineCommands.WriteLineMessage("Varebestilling");
                     WriteLineCommands.RunVareListe(Varebestilling.GetList());
                     ChooseBestillingMenu(WriteLineCommands.Menu(Varebestilling.MenuOptions, "Tilbage til mainmenu"));
+                    break;
+                case 3:
+                    WriteLineCommands.WriteLineMessage("Kundeliste");
+                    WriteLineCommands.RunKundeListe(KundeOprettelse.GetList());
+                    ChooseKundeMenu(WriteLineCommands.Menu(KundeOprettelse.MenuOptions, "Tilbage til mainmenu"));
                     break;
                 case 9:
                     Environment.Exit(0);
@@ -97,6 +105,35 @@ namespace H1_ERP
                     break;
             }
         }
+        private static void ChooseKundeMenu(int input)
+        {
+            switch (input)
+            {
+                case 1:
+                    Console.Clear();
+                    CreateKunde();
+                    ChooseStarterMenu(3);
+                    break;
+                case 2:
+                    Console.Clear();
+                    EditKunde();
+                    ChooseStarterMenu(3);
+                    break;
+                case 3:
+                    Console.Clear();
+                    SearchKunde();
+                    ChooseStarterMenu(3);
+                    break;
+                case 9:
+                    Console.Clear();
+                    ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
+                    break;
+                default:
+                    WriteLineCommands.WriteLineMessage("ERROR");
+                    break;
+
+            }
+        }
         private static void RemoveVare()
         {
             WriteLineCommands.WriteLineMessage("Indtast vare ID");
@@ -114,7 +151,7 @@ namespace H1_ERP
                 }
             }
             Item item = Vareliste.ReturnItemFromID(ID);
-            WriteLineCommands.WriteLineMessage($"Er du sikker på at du vil fjerne {item.ItemName}?\nTast 'y' hvis ja.");
+            WriteLineCommands.WriteLineMessage($"Er du sikker på at du vil fjerne {item.ItemName} fra listen?\nTast 'y' hvis ja.");
             string answer = ReadLineCommands.GetStringInput();
             if (answer == "y")
             {
@@ -151,12 +188,24 @@ namespace H1_ERP
                 }
             }
             Item item = Vareliste.ReturnItemFromID(ID);
-            WriteLineCommands.WriteLineMessage("Indtast nyt navn på vare");
+            WriteLineCommands.WriteLineMessage($"Indtast nyt navn på vare [Tryk enter for at bruge '{item.ItemName}']");
             string itemName = ReadLineCommands.GetStringInput();
-            WriteLineCommands.WriteLineMessage("Indtast ny salgs pris");
-            double salesPrice = ReadLineCommands.GetDoubleInput();
-            WriteLineCommands.WriteLineMessage("Indtast ny købspris");
-            double buyPrice = ReadLineCommands.GetDoubleInput();
+            WriteLineCommands.WriteLineMessage($"Indtast ny salgs pris [Tryk enter for at bruge '{item.ItemSalesPrice}']");
+            double salesPrice = ReadLineCommands.GetDoubleOrNothingInput();
+            WriteLineCommands.WriteLineMessage($"Indtast ny købspris [Tryk enter for at bruge '{item.ItemBuyPrice}']");
+            double buyPrice = ReadLineCommands.GetDoubleOrNothingInput();
+            if (string.IsNullOrEmpty(itemName))
+            {
+                itemName = item.ItemName;
+            }
+            if(salesPrice == 0)
+            {
+                salesPrice = item.ItemSalesPrice;
+            }
+            if(buyPrice == 0)
+            {
+                buyPrice = item.ItemBuyPrice;
+            }
             Item.EditItem(item, itemName, salesPrice, buyPrice);
             WriteLineCommands.WriteLineMessage("Ønsker du at tilføje denne vare til bestillingslisten?\nTast 'y' hvis ja.");
             string answer = ReadLineCommands.GetStringInput();
@@ -195,6 +244,34 @@ namespace H1_ERP
 
         }
         
+        private static void CreateKunde()
+        {
+            KundeOprettelse.CreateNewCustomer();
+        }
+        private static void EditKunde()
+        {
+            int ID;
+            WriteLineCommands.WriteLineMessage("Indtast kunde nummeret på den kunde du vil redigere");
+            while (true)
+            {
+                ID = ReadLineCommands.GetIntInput();
+                if (KundeOprettelse.ReturnFromID(ID) == null)
+                {
+                    WriteLineCommands.WriteLineMessage("Indtast et gyldigt ID");
+                }
+                else
+                {
+                    break;
+                }
+            }
+            KundeOprettelse.EditCustomer(ID);
+        }
+        private static void SearchKunde()
+        {
+            WriteLineCommands.WriteLineMessage("Indtast søgning: ");
+            WriteLineCommands.RunKundeListe(KundeOprettelse.SearchCustomer(ReadLineCommands.GetStringInput()));
+            WriteLineCommands.WritelineWaitForKeyPress("Tryk på en tast for at fortsætte til menuen igen.");
+        }
 
         
     }

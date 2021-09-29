@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.Models
 {
-    class Person
+    abstract class Person
     {
         public int PersonId { get; set; }
         public string Fornavn { get; set; }

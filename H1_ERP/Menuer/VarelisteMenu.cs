@@ -8,17 +8,14 @@ namespace H1_ERP.Menuer
 {
     public static class VarelisteMenu
     {
-        public static List<string> MenuOptions = new();
-        static VarelisteMenu()
+        private static List<string> _menuOptions = new()
         {
-            InitializeList();
-        }
-        private static void InitializeList()
-        {
-            MenuOptions.Add("Opret vare");
-            MenuOptions.Add("Ændre vare");
-            MenuOptions.Add("Søg vare");
-            MenuOptions.Add("Fjern vare");
-        }
+            "Opret vare",
+            "Ændre vare",
+            "Søg vare",
+            "Fjern vare"
+        };
+        public static IReadOnlyList<string> MenuOptions => _menuOptions.AsReadOnly();
+        
     }
 }

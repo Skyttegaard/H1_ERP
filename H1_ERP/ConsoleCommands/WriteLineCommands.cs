@@ -9,7 +9,13 @@ namespace H1_ERP.ConsoleCommands
 {
     class WriteLineCommands
     {
-        public static int Menu(List<string> menulist, string exitText)
+        /// <summary>
+        /// Printer en menu med valg fra en liste med strings. Exit tekst til den 9. og sidste menu mulighed som bliver brugt til at gå tilbage. Returnere et tal.
+        /// </summary>
+        /// <param name="menulist"></param>
+        /// <param name="exitText"></param>
+        /// <returns></returns>
+        public static int Menu(IReadOnlyList<string> menulist, string exitText)
         {
             int i = 1;
             foreach(string s in menulist)
@@ -22,7 +28,12 @@ namespace H1_ERP.ConsoleCommands
             return MenuItemPicker(menulist);
             
         }
-        private static int MenuItemPicker(List<string> list)
+        /// <summary>
+        /// Returnere et tal som skal passe med længden af listen som bliver brugt i Menu.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private static int MenuItemPicker(IReadOnlyList<string> list)
         {
             while (true)
             {
@@ -37,27 +48,45 @@ namespace H1_ERP.ConsoleCommands
                 }
             }
         }
-
+        /// <summary>
+        /// Skriver en ny linje
+        /// </summary>
         public static void NewLine()
         {
             Console.WriteLine();
         }
-
+        /// <summary>
+        /// Skriver en writeline i console.
+        /// </summary>
+        /// <param name="message"></param>
         public static void WriteLineMessage(string message)
         {
             Console.WriteLine(message);
         }
+        /// <summary>
+        /// Skriver en write i console.
+        /// </summary>
+        /// <param name="message"></param>
         public static void WriteMessage(string message)
         {
-            Console.WriteLine(message);
+            Console.Write(message);
         }
+        /// <summary>
+        /// Skriver en selvvalgt mængde af '-' i console.
+        /// </summary>
+        /// <param name="length"></param>
         public static void WriteBars(int length)
         {
             for (int i = 0; i < length; i++)
             {
                 Console.Write("-");
             }
+            NewLine();
         }
+        /// <summary>
+        /// Printer en liste med item objekt i console.
+        /// </summary>
+        /// <param name="list"></param>
         public static void RunVareListe(IReadOnlyList<Item> list)
         {
             Console.SetCursorPosition(0, 2);
@@ -73,6 +102,7 @@ namespace H1_ERP.ConsoleCommands
             int i = 4;
             foreach (var item in list)
             {
+                
                 Console.SetCursorPosition(0, i);
                 Console.Write(item.ItemName);
                 Console.SetCursorPosition(20, i);
@@ -86,13 +116,48 @@ namespace H1_ERP.ConsoleCommands
                 i++;
             }
             NewLine();
-            WriteBars(100);
+            WriteBars(120);
             NewLine();
         }
+        /// <summary>
+        /// Printer writeline message ud i console og venter på keypress.
+        /// </summary>
+        /// <param name="message"></param>
         public static void WritelineWaitForKeyPress(string message)
         {
             Console.WriteLine(message);
             Console.ReadLine();
+        }
+        /// <summary>
+        /// Printer en liste med kunde objekt i console.
+        /// </summary>
+        /// <param name="list"></param>
+        public static void RunKundeListe(IReadOnlyList<Kunde> list)
+        {
+            Console.SetCursorPosition(0, 2);
+            Console.WriteLine("Kundenummer:");
+            Console.SetCursorPosition(20, 2);
+            Console.WriteLine("Fornavn:");
+            Console.SetCursorPosition(40, 2);
+            Console.WriteLine("Efternavn:");
+            Console.SetCursorPosition(100, 2);
+            Console.WriteLine("Seneste ordredato");
+            int i = 4;
+            foreach(var kunde in list)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.WriteLine(kunde.Kundenummer);
+                Console.SetCursorPosition(20, i);
+                Console.WriteLine(kunde.Fornavn);
+                Console.SetCursorPosition(40, i);
+                Console.WriteLine(kunde.Efternavn);
+                Console.SetCursorPosition(100, i);
+                Console.WriteLine(kunde.SenesteOrdreDato);
+                i++;
+            }
+            NewLine();
+            WriteBars(120);
+            NewLine();
         }
     }
 }
