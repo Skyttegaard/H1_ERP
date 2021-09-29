@@ -208,6 +208,7 @@ namespace H1_ERP
                 buyPrice = item.ItemBuyPrice;
             }
             Item.EditItem(item, itemName, salesPrice, buyPrice);
+            Vareliste.UpdateVare(item);
             WriteLineCommands.WriteLineMessage("Ønsker du at tilføje denne vare til bestillingslisten?\nTast 'y' hvis ja.");
             string answer = ReadLineCommands.GetStringInput();
             if (answer.ToLower() == "y")

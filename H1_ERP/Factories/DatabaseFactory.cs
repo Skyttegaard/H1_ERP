@@ -69,8 +69,59 @@ namespace H1_ERP.Factories
             {
                 WriteLineCommands.WriteLineMessage("Uploading to database...");
             }
-            WriteLineCommands.WritelineWaitForKeyPress("Success!");
+            WriteLineCommands.WritelineWaitForKeyPress($"{kunde.Fornavn} {kunde.Efternavn} has been added to the database!");
         }
-        
+        public static void EditKunde(Kunde kunde)
+        {
+            SqlCommand command = new($"UPDATE Kunder Set Fornavn = '{kunde.Fornavn}', Efternavn = '{kunde.Efternavn}', Postnummer = {kunde.Adresse.PostNummer}, [By] = '{kunde.Adresse.By}', Vejnavn = '{kunde.Adresse.Vejnavn}', Husnummer = '{kunde.Adresse.HusNummer}', Email = '{kunde.Kontakt.Email}', Telefonnummer = {kunde.Kontakt.TelefonNummer}, Kontaktinfo = '{kunde.Kontakt.Tekst}', PersonID = {kunde.PersonId} WHERE ID={kunde.Kundenummer}", sqlServer);
+
+            SqlDataReader dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                WriteLineCommands.WriteLineMessage("Editing database...");
+            }
+            WriteLineCommands.WritelineWaitForKeyPress($"{kunde.Fornavn} {kunde.Efternavn} has been updated!");
+        }
+        public static void RemoveKunde(Kunde kunde)
+        {
+            SqlCommand command = new($"DELETE FROM Kunde WHERE ID={kunde.Kundenummer}", sqlServer);
+            SqlDataReader dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                WriteLineCommands.WriteLineMessage("Removing kunde from database...");
+            }
+            WriteLineCommands.WritelineWaitForKeyPress($"{kunde.Fornavn} {kunde.Efternavn} has been removed from the database.");
+        }
+        public static void AddVare(Item item)
+        {
+            SqlCommand command = new($"INSERT INTO Varer (Navn, Lagerantal, Salgspris,Købspris) VALUES('{item.ItemName}',{item.Quantity},{item.ItemSalesPrice},{item.ItemBuyPrice})", sqlServer);
+            SqlDataReader dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                WriteLineCommands.WriteLineMessage("Adding vare to database...");
+            }
+            WriteLineCommands.WritelineWaitForKeyPress($"{item.ItemName} has been added to the database!");
+        }
+        public static void EditVare(Item item)
+        {
+            SqlCommand command = new($"UPDATE Varer set Navn = '{item.ItemName}', Salgspris = {item.ItemSalesPrice}, Købspris = {item.ItemBuyPrice} WHERE ID = {item.ItemID}", sqlServer);
+            SqlDataReader dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                WriteLineCommands.WriteLineMessage("Editing vare...");
+            }
+            WriteLineCommands.WritelineWaitForKeyPress($"{item.ItemName} has been updated!");
+        }
+        public static void RemoveVare(Item item)
+        {
+            SqlCommand command = new($"DELETE FROM Varer WHERE ID={item.ItemID}", sqlServer);
+            SqlDataReader dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                WriteLineCommands.WriteLineMessage("Removing Vare from database...");
+            }
+            WriteLineCommands.WritelineWaitForKeyPress($"{item.ItemName} has been removed from the database.");
+        }
+
     }
 }

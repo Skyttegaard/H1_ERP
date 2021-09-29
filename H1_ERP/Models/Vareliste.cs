@@ -22,11 +22,12 @@ namespace H1_ERP.Models
             if(item.Quantity <= 1)
             {
                 _varer.Remove(item);
-
+                DatabaseFactory.RemoveVare(item);
             }
             else
             {
                 item.Quantity--;
+                DatabaseFactory.EditVare(item);
             }
         }
         /// <summary>
@@ -35,19 +36,26 @@ namespace H1_ERP.Models
         /// <param name="item"></param>
         public static void AddItemToList(Item item)
         {
-            if(_varer.All(it => it.ItemID != item.ItemID))
-            {
-                _varer.Add(item);
-            }
-            if(_varer.Any(it => it.ItemName == item.ItemName && it.ItemID == item.ItemID))
-            {
-                _varer.FirstOrDefault(it => it.ItemID == item.ItemID).Quantity++;
-            }
-            else
-            {
-                WriteLineCommands.WriteLineMessage("ID is already used/wrong name for item is used");
-                Thread.Sleep(3000);
-            }
+
+            DatabaseFactory.AddVare(item);
+            _varer = DatabaseFactory.AddEverythingToVareLists();
+
+
+
+            //-----------------BLEV BRUGT TIL AT TJEKKE OM VAREN ALLEREDE FANDTES OG TILFØJEDE 1 TIL ANTAL HVIS DEN GJORDE. ELLERS ERROR HVIS MAN PRØVEDE AT GIVE SAMME ID SOM EN ANDEN.
+            //if(_varer.All(it => it.ItemID != item.ItemID))
+            //{
+            //    _varer.Add(item);
+            //}
+            //if(_varer.Any(it => it.ItemName == item.ItemName && it.ItemID == item.ItemID))
+            //{
+            //    _varer.FirstOrDefault(it => it.ItemID == item.ItemID).Quantity++;
+            //}
+            //else
+            //{
+            //    WriteLineCommands.WriteLineMessage("ID is already used/wrong name for item is used");
+            //    Thread.Sleep(3000);
+            //}
         }
         /// <summary>
         /// Tilføjer quantity til eksisterende ting i varelisten ved hjælp af en liste med item objekt.
@@ -62,10 +70,7 @@ namespace H1_ERP.Models
                 itemtest.Quantity += item.Quantity;
             }
         }
-        public static void test(List<Item> list)
-        {
-            _varer.AddRange(list);
-        }
+        
         /// <summary>
         /// Tilføjer en enkelt item's quantity til varelisten.
         /// </summary>
@@ -103,6 +108,11 @@ namespace H1_ERP.Models
             }
             
             return i;
+        }
+        public static void UpdateVare(Item item)
+        {
+            DatabaseFactory.EditVare(item);
+            _varer = DatabaseFactory.AddEverythingToVareLists();
         }
         public static IReadOnlyList<Item> GetList() => _varer.AsReadOnly();
         

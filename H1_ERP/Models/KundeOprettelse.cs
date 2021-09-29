@@ -47,10 +47,7 @@ namespace H1_ERP.Models
         {
             return _kunder.FirstOrDefault(ku => ku.Kundenummer == kundeNummer);
         } 
-        public static void AddMultipleKunderToList(List<Kunde> kunde)
-        {
-            _kunder.AddRange(kunde);
-        }
+        
         public static void EditCustomer(int kundeNummer)
         {
             Kunde kunde = _kunder.FirstOrDefault(ku => ku.Kundenummer == kundeNummer);
@@ -77,6 +74,7 @@ namespace H1_ERP.Models
             kunde.Kontakt.Email = ReadLineCommands.GetKundeInfo(kunde.Kontakt.Email);
             WriteLineCommands.WriteLineMessage("Indtast telefonnummer");
             kunde.Kontakt.TelefonNummer = ReadLineCommands.GetKundeInfo(kunde.Kontakt.TelefonNummer);
+            DatabaseFactory.EditKunde(kunde);
         }
         /// <summary>
         /// Søger efter kunder og returnere en liste

@@ -14,7 +14,7 @@ namespace H1_ERP.Models
         public double ItemBuyPrice { get; private set; }
         public int Quantity { get; set; }
 
-        public Item(string itemName, double itemSalesPrice, double itemBuyPrice, int itemID, int quantity = 0)
+        public Item(string itemName, double itemSalesPrice, double itemBuyPrice, int itemID = 0, int quantity = 0)
         {
             ItemName = itemName;
             ItemSalesPrice = itemSalesPrice;

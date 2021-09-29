@@ -22,10 +22,9 @@ namespace H1_ERP.Menuer
             double salesPrice = ReadLineCommands.GetDoubleInput();
             WriteLineCommands.WriteLineMessage("Please enter item buy price");
             double buyPrice = ReadLineCommands.GetDoubleInput();
-            WriteLineCommands.WriteLineMessage("Please enter item ID");
-            int ID = ReadLineCommands.GetIntInput();
             
-            Vareliste.AddItemToList(new Item(itemname, salesPrice, buyPrice, ID));
+            
+            Vareliste.AddItemToList(new Item(itemname, salesPrice, buyPrice));
             
             
         }
