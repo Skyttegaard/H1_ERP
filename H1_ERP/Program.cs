@@ -9,12 +9,13 @@ namespace H1_ERP
 {
     class Program
     {
+        
         private static List<string> _menuListe = new() {"Vareliste", "Varebestilling", "Kundeliste" };
         static void Main(string[] args)
         {
             Logger.Info("Programmet er startet op");
             Logger.Error("En mærkelig fejl er opstået");
-            
+
             
             ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.Models
 {
-    class KontaktOplysning
+    public class KontaktOplysning
     {
         public string Email { get; set; }
         public int TelefonNummer { get; set; }

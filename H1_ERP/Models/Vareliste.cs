@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using H1_ERP.ConsoleCommands;
+using H1_ERP.Factories;
 
 namespace H1_ERP.Models
 {
     class Vareliste
     {
-        private static List<Item> _varer = new();
+        private static List<Item> _varer = DatabaseFactory.AddEverythingToVareLists();
 
         public static void CreateItem(string name, double buyPrice, double salesPrice, int ID)
         {
@@ -60,6 +61,10 @@ namespace H1_ERP.Models
                 itemtest = _varer.FirstOrDefault(it => it.ItemID == item.ItemID);
                 itemtest.Quantity += item.Quantity;
             }
+        }
+        public static void test(List<Item> list)
+        {
+            _varer.AddRange(list);
         }
         /// <summary>
         /// Tilføjer en enkelt item's quantity til varelisten.

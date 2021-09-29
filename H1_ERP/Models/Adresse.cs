@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.Models
 {
-    class Adresse
+    public class Adresse
     {
         public string Vejnavn { get; set; }
         public string HusNummer { get; set; }

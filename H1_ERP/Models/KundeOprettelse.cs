@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using H1_ERP.ConsoleCommands;
+using H1_ERP.Factories;
 
 namespace H1_ERP.Models
 {
@@ -12,7 +13,7 @@ namespace H1_ERP.Models
     {
         private static List<string> _menuOptions = new() { "Opret kunde", "Rediger kunde", "Søg kunde" };
         public static IReadOnlyList<string> MenuOptions => _menuOptions.AsReadOnly();
-        private static List<Kunde> _kunder = new();
+        private static List<Kunde> _kunder = DatabaseFactory.AddEverythingToKundeLists();
         public static IReadOnlyList<Kunde> GetList() => _kunder.AsReadOnly();
 
         public static void CreateNewCustomer()
@@ -37,14 +38,19 @@ namespace H1_ERP.Models
             int telefonNummer = ReadLineCommands.GetIntInput();
             WriteLineCommands.WriteLineMessage("Indtast en kontakt besked her:");
             string tekst = ReadLineCommands.GetStringInput();
-            _kunder.Add(new Kunde(fornavn, efternavn, personId, email, telefonNummer, tekst, vejNavn, husNummer, postNummer, by));
+            Kunde kunde = new(fornavn, efternavn, personId, email, telefonNummer, tekst, vejNavn, husNummer, postNummer, by);
+            DatabaseFactory.AddKundeToDatabase(kunde);
+            _kunder = DatabaseFactory.AddEverythingToKundeLists();
 
         }
         public static Kunde ReturnFromID(int kundeNummer)
         {
             return _kunder.FirstOrDefault(ku => ku.Kundenummer == kundeNummer);
         } 
-
+        public static void AddMultipleKunderToList(List<Kunde> kunde)
+        {
+            _kunder.AddRange(kunde);
+        }
         public static void EditCustomer(int kundeNummer)
         {
             Kunde kunde = _kunder.FirstOrDefault(ku => ku.Kundenummer == kundeNummer);

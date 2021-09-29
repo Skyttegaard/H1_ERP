@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.Models
 {
-    class Kunde : Person
+    public class Kunde : Person
     {
         public int Kundenummer { get; set; }
         public int SenesteOrderID { get; set; }
