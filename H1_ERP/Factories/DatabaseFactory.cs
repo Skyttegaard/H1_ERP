@@ -20,7 +20,7 @@ namespace H1_ERP.Factories
         }
         private static string ReadConnectionString()
         {
-            string result = "Server=LAPTOP-D3QE2FUO;Database=ERPSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string result = "Server=.;Database=ERPSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
             if (!File.Exists(".\\settings.ini"))
             {
                 File.WriteAllText(".\\settings.ini", result);
