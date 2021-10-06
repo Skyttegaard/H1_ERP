@@ -239,6 +239,7 @@ namespace H1_ERP.ConsoleCommands
                 Console.WriteLine(bestilling.Antal);
                 Console.SetCursorPosition(60, i);
                 Console.WriteLine(bestilling.GetPrisXAntal());
+                i++;
             }
             NewLine();
             return salgsordre;
