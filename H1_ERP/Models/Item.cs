@@ -13,14 +13,16 @@ namespace H1_ERP.Models
         public int ItemID { get; private set; }
         public double ItemBuyPrice { get; private set; }
         public int Quantity { get; set; }
+        public int StorageCapacity { get; set; }
 
-        public Item(string itemName, double itemSalesPrice, double itemBuyPrice, int itemID = 0, int quantity = 0)
+        public Item(string itemName, double itemSalesPrice, double itemBuyPrice,int storageCapacity, int itemID = 0, int quantity = 0)
         {
             ItemName = itemName;
             ItemSalesPrice = itemSalesPrice;
             ItemBuyPrice = itemBuyPrice;
             ItemID = itemID;
             Quantity = quantity;
+            StorageCapacity = storageCapacity;
         }
         public static void EditItem(Item item, string itemName, double itemSalesPrice, double itemBuyPrice)
         {

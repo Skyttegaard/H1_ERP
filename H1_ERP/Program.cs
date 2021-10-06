@@ -4,23 +4,23 @@ using System.Collections.Generic;
 using H1_ERP.ConsoleCommands;
 using H1_ERP.Menuer;
 using H1_ERP.Models;
-
+using H1_ERP.Factories;
 namespace H1_ERP
 {
     class Program
     {
         
-        private static List<string> _menuListe = new() {"Vareliste", "Varebestilling", "Kundeliste" };
+        private static List<string> _menuListe = new() {"Vareliste", "Varebestilling", "Kundeliste", "Salgsordre" };
         static void Main(string[] args)
         {
             Logger.Info("Programmet er startet op");
-            Logger.Error("En mærkelig fejl er opstået");
-
+            KundeOprettelse.LoadList();
+            Varebestilling.loadlist();
             
             ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
         }
 
-        private static void ChooseStarterMenu(int input)
+        private static void ChooseStarterMenu(int input, Salgsordre salgsordre = null)
         {
             Console.Clear();
             switch (input)
@@ -31,8 +31,9 @@ namespace H1_ERP
                     RunVareliste();
                     break;
                 case 2:
+                    Console.Clear();
                     WriteLineCommands.WriteLineMessage("Varebestilling");
-                    WriteLineCommands.RunVareListe(Varebestilling.GetList());
+                    WriteLineCommands.RunBestillingsListe(Varebestilling.GetList());
                     ChooseBestillingMenu(WriteLineCommands.Menu(Varebestilling.MenuOptions, "Tilbage til mainmenu"));
                     break;
                 case 3:
@@ -40,11 +41,40 @@ namespace H1_ERP
                     WriteLineCommands.RunKundeListe(KundeOprettelse.GetList());
                     ChooseKundeMenu(WriteLineCommands.Menu(KundeOprettelse.MenuOptions, "Tilbage til mainmenu"));
                     break;
+                case 4:
+                    Console.Clear();
+                    if (salgsordre == null)
+                    {
+                        salgsordre = WriteLineCommands.RunSalgsOrdreListe(WriteLineCommands.CreateNewOrder());
+                    }
+                    else
+                    {
+                        WriteLineCommands.RunSalgsOrdreListe(salgsordre);
+                    }
+                    WriteLineCommands.WriteLineMessage("Salgsordre");
+                    ChooseSalgsOrdreMenu(WriteLineCommands.Menu(Salgsordre.SalgsOrdreMenuOptions, "Tilbage til mainmenu"), salgsordre);
+                    break;
                 case 9:
                     Environment.Exit(0);
                     break;
                 default:
                     WriteLineCommands.WriteLineMessage("ERROR");
+                    break;
+            }
+        }
+        private static void ChooseSalgsOrdreMenu(int input, Salgsordre salgsordre = null)
+        {
+            
+
+            switch (input)
+            {
+                case 1:
+                    ReadLineCommands.OrderVare(salgsordre.Kunde.Kundenummer,salgsordre.Ordreid);
+                    ChooseStarterMenu(4, WriteLineCommands.RunSalgsOrdreListe(salgsordre));
+                    break;
+                case 9:
+                    Console.Clear();
+                    ChooseStarterMenu(WriteLineCommands.Menu(_menuListe, "Luk programmet"));
                     break;
             }
         }
@@ -94,7 +124,7 @@ namespace H1_ERP
                     ChooseStarterMenu(2); 
                     break;
                 case 2:
-                    Varebestilling.OrderAllItems();
+                    Varebestilling.DeliverAllItems();
                     ChooseStarterMenu(2);
                     break;
                 case 9:
@@ -156,7 +186,9 @@ namespace H1_ERP
             string answer = ReadLineCommands.GetStringInput();
             if (answer == "y")
             {
-                Vareliste.RemoveItem(item);
+                WriteLineCommands.WriteLineMessage($"Hvor mange vil du fjerne fra listen?");
+                int amount = ReadLineCommands.GetIntInput();
+                Vareliste.RemoveItem(item, amount);
             }
             else
             {
@@ -213,8 +245,7 @@ namespace H1_ERP
             string answer = ReadLineCommands.GetStringInput();
             if (answer.ToLower() == "y")
             {
-                WriteLineCommands.WriteLineMessage("Hvor mange?");
-                Varebestilling.AddItemToList(item, ReadLineCommands.GetIntInput());
+                Varebestilling.AddItemToBestillingList(item);
             }
             
 
@@ -228,7 +259,7 @@ namespace H1_ERP
         
         private static void OrderSingleItems()
         {
-            WriteLineCommands.WriteLineMessage("Skriv ID på varen du vil bestille hjem.");
+            WriteLineCommands.WriteLineMessage("Skriv ID på ordren der er bestilt hjem.");
             int ID;
             while (true)
             {
@@ -242,7 +273,7 @@ namespace H1_ERP
                     break;
                 }
             }
-            Varebestilling.OrderSingleItem(ID);
+            Varebestilling.DeliverSingleItem(ID);
 
         }
         

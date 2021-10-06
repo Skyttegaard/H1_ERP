@@ -13,11 +13,8 @@ namespace H1_ERP.Models
     {
         private static List<Item> _varer = DatabaseFactory.AddEverythingToVareLists();
 
-        public static void CreateItem(string name, double buyPrice, double salesPrice, int ID)
-        {
-            _varer.Add(new Item(name, salesPrice, buyPrice, ID));
-        }
-        public static void RemoveItem(Item item)
+        
+        public static void RemoveItem(Item item, int amount)
         {
             if(item.Quantity <= 1)
             {
@@ -26,7 +23,12 @@ namespace H1_ERP.Models
             }
             else
             {
-                item.Quantity--;
+                item.Quantity -= amount;
+                if (item.Quantity <= 0)
+                {
+                    DatabaseFactory.RemoveVare(item);
+                    return;
+                }
                 DatabaseFactory.EditVare(item);
             }
         }
@@ -109,12 +111,23 @@ namespace H1_ERP.Models
             
             return i;
         }
+        /// <summary>
+        /// Redigere en vare og tiføjer til databasen. Opdatere listen varelisten for at få vare ID.
+        /// </summary>
+        /// <param name="item"></param>
         public static void UpdateVare(Item item)
         {
             DatabaseFactory.EditVare(item);
             _varer = DatabaseFactory.AddEverythingToVareLists();
         }
+        /// <summary>
+        /// Får fat i varelisten som readonly
+        /// </summary>
+        /// <returns></returns>
         public static IReadOnlyList<Item> GetList() => _varer.AsReadOnly();
-        
+        public static void ReloadList()
+        {
+            _varer = DatabaseFactory.AddEverythingToVareLists();
+        }
     }
 }

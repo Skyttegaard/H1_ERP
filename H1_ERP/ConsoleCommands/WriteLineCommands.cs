@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using H1_ERP.Models;
+using H1_ERP.Factories;
 
 namespace H1_ERP.ConsoleCommands
 {
@@ -119,6 +120,34 @@ namespace H1_ERP.ConsoleCommands
             WriteBars(120);
             NewLine();
         }
+        public static void RunBestillingsListe(IReadOnlyList<Bestillinger> list)
+        {
+            Console.SetCursorPosition(0, 2);
+            Console.WriteLine("Vare navn:");
+            Console.SetCursorPosition(20, 2);
+            Console.WriteLine("Vare lokation:");
+            Console.SetCursorPosition(40, 2);
+            Console.WriteLine("Antal bestilte:");
+            Console.SetCursorPosition(60, 2);
+            Console.WriteLine("OrderID");
+            int i = 4;
+            foreach (var item in list)
+            {
+
+                Console.SetCursorPosition(0, i);
+                Console.Write(item.ItemName);
+                Console.SetCursorPosition(20, i);
+                Console.Write(item.Lokation);
+                Console.SetCursorPosition(40, i);
+                Console.Write(item.Antal);
+                Console.SetCursorPosition(60, i);
+                Console.Write(item.OrderID);
+                i++;
+            }
+            NewLine();
+            WriteBars(120);
+            NewLine();
+        }
         /// <summary>
         /// Printer writeline message ud i console og venter på keypress.
         /// </summary>
@@ -158,6 +187,61 @@ namespace H1_ERP.ConsoleCommands
             NewLine();
             WriteBars(120);
             NewLine();
+        }
+        public static Salgsordre CreateNewOrder()
+        {
+            Console.WriteLine("Indtast kunde nummer");
+            Kunde kunde = KundeOprettelse.ReturnFromID(ReadLineCommands.GetIntInput());
+            int ordreid = DatabaseFactory.CreateOrdre(kunde.Kundenummer, kunde.Adresse.By);
+            Salgsordre salgsordre = new(kunde, ordreid);
+            return salgsordre;
+            
+        }
+        public static Salgsordre RunSalgsOrdreListe(Salgsordre salgsordre)
+        {
+            Console.Clear();
+            Console.WriteLine($"Ordre ID: {salgsordre.Ordreid}");
+            Console.SetCursorPosition(0, 2);
+            Console.WriteLine("KontaktInfo: ");
+            Console.SetCursorPosition(60, 2);
+            Console.WriteLine("Addresse:");
+            Console.SetCursorPosition(0, 3);
+            Console.WriteLine($"{salgsordre.Kunde.Fornavn} {salgsordre.Kunde.Efternavn}");
+            Console.SetCursorPosition(0, 4);
+            Console.WriteLine(salgsordre.Kunde.Kontakt.Email);
+            Console.SetCursorPosition(0, 5);
+            Console.WriteLine(salgsordre.Kunde.Kontakt.TelefonNummer);
+            Console.SetCursorPosition(60, 3);
+            Console.WriteLine(salgsordre.Kunde.Adresse.By);
+            Console.SetCursorPosition(60, 4);
+            Console.WriteLine($"{salgsordre.Kunde.Adresse.Vejnavn} {salgsordre.Kunde.Adresse.HusNummer}");
+            Console.SetCursorPosition(60, 5);
+            Console.WriteLine(salgsordre.Kunde.Adresse.PostNummer);
+            NewLine();
+            WriteBars(120);
+            NewLine();
+            Console.SetCursorPosition(0, 10);
+            Console.WriteLine("Varenummer:");
+            Console.SetCursorPosition(20, 10);
+            Console.WriteLine("Varenavn:");
+            Console.SetCursorPosition(40, 10);
+            Console.WriteLine("Antal:");
+            Console.SetCursorPosition(60, 10);
+            Console.WriteLine("Pris:");
+            int i = 11;
+            foreach (Bestillinger bestilling in Varebestilling.GetList().Where(be => be.OrderID == salgsordre.Ordreid))
+            {
+                Console.SetCursorPosition(0, i);
+                Console.WriteLine(bestilling.VareID);
+                Console.SetCursorPosition(20, i);
+                Console.WriteLine(bestilling.ItemName);
+                Console.SetCursorPosition(40, i);
+                Console.WriteLine(bestilling.Antal);
+                Console.SetCursorPosition(60, i);
+                Console.WriteLine(bestilling.GetPrisXAntal());
+            }
+            NewLine();
+            return salgsordre;
         }
     }
 }

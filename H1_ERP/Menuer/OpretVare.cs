@@ -22,9 +22,10 @@ namespace H1_ERP.Menuer
             double salesPrice = ReadLineCommands.GetDoubleInput();
             WriteLineCommands.WriteLineMessage("Please enter item buy price");
             double buyPrice = ReadLineCommands.GetDoubleInput();
+            WriteLineCommands.WriteLineMessage("Please enter the storage capacity for this item");
+            int storageCapacity = ReadLineCommands.GetIntInput();
             
-            
-            Vareliste.AddItemToList(new Item(itemname, salesPrice, buyPrice));
+            Vareliste.AddItemToList(new Item(itemname, salesPrice, buyPrice, storageCapacity));
             
             
         }

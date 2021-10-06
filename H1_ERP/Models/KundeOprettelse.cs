@@ -16,6 +16,15 @@ namespace H1_ERP.Models
         private static List<Kunde> _kunder = DatabaseFactory.AddEverythingToKundeLists();
         public static IReadOnlyList<Kunde> GetList() => _kunder.AsReadOnly();
 
+        public static void LoadList()
+        {
+            _kunder = DatabaseFactory.AddEverythingToKundeLists();
+            foreach(Kunde kunde in _kunder)
+            {
+                kunde.SenesteOrdreDato = DatabaseFactory.GetLatestKundeOrderDato(kunde.Kundenummer);
+            }
+        }
+
         public static void CreateNewCustomer()
         {
             WriteLineCommands.WriteLineMessage("Indtast fornavn");

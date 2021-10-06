@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using H1_ERP.Models;
+using H1_ERP.Factories;
 
 namespace H1_ERP.ConsoleCommands
 {
@@ -25,7 +26,7 @@ namespace H1_ERP.ConsoleCommands
                 }
                 catch
                 {
-                    Console.WriteLine("Indtast et tal");
+                    Console.WriteLine("Indtast et helt tal");
                 }
             }
         }
@@ -152,6 +153,16 @@ namespace H1_ERP.ConsoleCommands
                     Console.WriteLine("Indtast et tal");
                 }
             }
+        }
+        public static void OrderVare(int kundeID, int ordreid)
+        {
+
+            WriteLineCommands.WriteLineMessage("Indtast varenummer");
+            int vareNummer = GetIntInput();
+            WriteLineCommands.WriteLineMessage("Indtast antal af vare");
+            int antal = GetIntInput();
+            DatabaseFactory.AddVareToBestillingList(vareNummer, antal, kundeID, ordreid);
+            Varebestilling.loadlist();
         }
     }
 }
